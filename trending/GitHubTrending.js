@@ -18,7 +18,7 @@ export default class GitHubTrending {
       .then((response)=>response.text())
       .catch((error)=>{
         reject(error);
-        console.log(err);
+        console.log(error);
       }).then((responseData)=>{
         try {
           resolve(TrendingUtil.htmlToRepo(responseData));
