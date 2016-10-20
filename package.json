@@ -1,12 +1,27 @@
 {
   "name": "GitHubTrending",
-  "version": "0.0.1",
-  "private": true,
+  "version": "1.0.8",
+  "description": "This is a library for obtaining https://github.com/trending data.",
+  "main": "index.js",
   "scripts": {
-    "start": "node node_modules/react-native/local-cli/cli.js start"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "dependencies": {
-    "react": "15.2.1",
-    "react-native": "0.31.0"
-  }
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/crazycodeboy/GitHubTrending.git"
+  },
+  "keywords": [
+    "GitHubTrending",
+    "Trending",
+    "open source"
+  ],
+  "author": "crazycodeboy",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/crazycodeboy/GitHubTrending/issues"
+  },
+  "peerDependencies": {
+    "react-native": ">=0.20.0"
+  },
+  "homepage": "https://github.com/crazycodeboy/GitHubTrending#readme"
 }
