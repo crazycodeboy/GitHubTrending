@@ -1,7 +1,8 @@
 /**
  * TrendingUtil
  * 工具类：用于将github trending html 转换成 TrendingRepoModel
- * https://github.com/crazycodeboy
+ * 项目地址:https://github.com/crazycodeboy/GitHubTrending
+ * 博客地址:http://www.devio.org
  * @flow
  */
 
