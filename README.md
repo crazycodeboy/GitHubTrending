@@ -17,3 +17,5 @@ new GitHubTrending().fetchTrending(url)
         //
 });
 ```
+
+>More examples can refer to [GitHubPopular](https://github.com/crazycodeboy/GitHubPopular)
