@@ -7,7 +7,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "GitHubTrending": "^1.0.8",
+    "GitHubTrending": "^2.0.0",
     "react": "15.3.2",
     "react-native": "0.35.0"
   },

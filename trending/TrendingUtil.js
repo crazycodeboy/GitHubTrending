@@ -22,55 +22,48 @@ export default class TrendingUtil {
 
             this.parseRepoBaseInfo(repo, html);
 
-            var metaNoteContent = this.parseContentOfNode(html, 'repo-list-meta');
+            var metaNoteContent = this.parseContentWithNote(html, 'class="f6 text-gray mt-2">','</li>');
             this.parseRepoMeta(repo, metaNoteContent);
+            this.parseRepoLang(repo,metaNoteContent);
             this.parseRepoContributors(repo, metaNoteContent);
             repos.push(repo);
         }
         return repos;
     }
+    static parseContentWithNote(htmlStr,startFlag,endFlag){
+        var noteStar=htmlStr.indexOf(startFlag);
+        if(noteStar==-1){
+            return '';
+        }else {
+            noteStar+=+startFlag.length;
+        }
 
-    static parseContentOfNode(htmlStr, classFlag) {
-        var noteEnd = htmlStr.indexOf(' class="' + classFlag);
-        var noteStart = htmlStr.lastIndexOf('<', noteEnd) + 1;
-        var note = htmlStr.substring(noteStart, noteEnd);
-
-        var sliceStart = htmlStr.indexOf(classFlag) + classFlag.length + 2;
-        var sliceEnd = htmlStr.indexOf('</' + note + '>', sliceStart);
-        var content = htmlStr.substring(sliceStart, sliceEnd);
-        return StringUtil.trim(content);
+        var noteEnd=htmlStr.indexOf(endFlag,noteStar);
+        var content=htmlStr.substring(noteStar,noteEnd);
+        return StringUtil.trim(content)
     }
-
     static parseRepoBaseInfo(repo, htmlBaseInfo) {
         var urlIndex = htmlBaseInfo.indexOf('<a href="') + '<a href="'.length;
         var url = htmlBaseInfo.slice(urlIndex, htmlBaseInfo.indexOf('">', urlIndex));
         repo.url = url;
         repo.fullName = url.slice(1, url.length);
 
-        var description = this.parseContentOfNode(htmlBaseInfo, 'repo-list-description');
-        var index = description.indexOf('</g-emoji>');
-        if (index !== -1) {
-            var indexEmoji = description.indexOf('</g-emoji>');
-            var emoji = description.substring(description.indexOf('>') + 1, indexEmoji)
-            description = emoji + description.substring(indexEmoji + '</g-emoji>'.length);
-        }
+        var description = this.parseContentWithNote(htmlBaseInfo, '<p class="col-9 d-inline-block text-gray m-0 pr-4">','</p>');
         repo.description = description;
     }
 
-    static parseRepoMeta(repo, htmlMeta) {
-        var splitWit_n = htmlMeta.split('\n');
-        if (splitWit_n[0].search('stars') === -1) {
-            repo.language = splitWit_n[0];
-        }
-        for (var i = 0; i < splitWit_n.length; i++) {
-            if (splitWit_n[i].search('stars') !== -1) {
-                repo.meta = StringUtil.trim(splitWit_n[i]);
-                break;
-            }
-        }
+    static parseRepoMeta(repo, metaNoteContent) {
+        var content=this.parseContentWithNote(metaNoteContent,'<span class="float-right">','</span>');
+        var metaContent=content.substring(content.indexOf('</svg>')+'</svg>'.length,content.length);
+        repo.meta=StringUtil.trim(metaContent);
+    }
+    static parseRepoLang(repo, metaNoteContent) {
+        var content=this.parseContentWithNote(metaNoteContent,'programmingLanguage">','</span>');
+        repo.language=StringUtil.trim(content);
     }
 
     static parseRepoContributors(repo, htmlContributors) {
+        htmlContributors=this.parseContentWithNote(htmlContributors,'Built by','</a>');
         var splitWitSemicolon = htmlContributors.split('"');
         repo.contributorsUrl = splitWitSemicolon[1];
         var contributors = [];
