@@ -5,19 +5,15 @@
  */
 
 import React, {Component} from 'react';
-import {
-    AppRegistry,
-    StyleSheet,
-    Text,
-    TextInput,
-    View
-} from 'react-native';
-import  GitHubTrending from 'GitHubTrending'
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import GitHubTrending from 'GitHubTrending'
+
 export default class test extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: ''
+            dataArray: [],
+            result: "loading"
         }
     }
 
@@ -32,13 +28,14 @@ export default class test extends Component {
 
     test(url) {
         new GitHubTrending().fetchTrending(url)
-            .then((data)=> {
+            .then((data) => {
                 this.setState({
-                    data:JSON.stringify(data),
+                    dataArray: data,
+                    result: 'success'
                 })
-            }).catch((error)=> {
+            }).catch((error) => {
             this.setState({
-                data:error,
+                result: "failure",
             })
         });
     }
@@ -46,14 +43,36 @@ export default class test extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <Text style={styles.welcome}
-                      onPress={()=>this.loadData()}
+                <Text style={styles.button}
+                      onPress={() => this.loadData()}
                 >
                     Load Data
                 </Text>
                 <Text style={styles.input}>
-                    {this.state.data}
+                    {this.state.result}
                 </Text>
+                <ScrollView>
+                    <View style={{flex: 1}}>
+                        {
+                            this.state.dataArray.map((item, index, arr) => {
+                                return <View
+                                    style={styles.row}
+                                    key={index}>
+                                    <Text>fullName:{item.fullName}</Text>
+                                    <Text>url:{item.fullName}</Text>
+                                    <Text>description:{item.description}</Text>
+                                    <Text>language:{item.language}</Text>
+                                    <Text>meta:{item.meta}</Text>
+                                    <Text>contributors count :{item.contributors.length}</Text>
+                                    <Text>contributorsUrl :{item.contributorsUrl}</Text>
+                                    <Text>starCount count :{item.starCount}</Text>
+                                    <Text>forkCount count :{item.forkCount}</Text>
+                                </View>
+                            })
+                        }
+                    </View>
+                </ScrollView>
+
             </View>
         );
     }
@@ -62,17 +81,21 @@ export default class test extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#F5FCFF',
+        marginTop: 30
+
     },
-    welcome: {
-        fontSize: 20,
-        textAlign: 'center',
-        margin: 10,
+    row: {
+        flex: 1,
+        marginBottom: 10,
+        borderBottomWidth:1,
+        borderColor:"gray"
+    },
+    button: {
+        width: 100,
+        backgroundColor: 'red',
+        padding: 10
     },
     input: {
-        height:200,
-        backgroundColor:'gray'
+        backgroundColor: 'gray'
     },
 });
