@@ -7,7 +7,7 @@
 import TrendingUtil from './TrendingUtil';
 
 export default class GitHubTrending {
-  GitHubTrending(){//Singleton pattern
+  constructor(){//Singleton pattern
     if (typeof GitHubTrending.instance==='object') {
       return GitHubTrending.instance;
     }
