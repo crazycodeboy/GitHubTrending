@@ -29,9 +29,9 @@ var TAGS = {
 }
 export default class TrendingUtil {
     static htmlToRepo(responseData) {
-        responseData = responseData.substring(responseData.indexOf('<li class="repo-list-item'), responseData.indexOf('</ol>')).replace(/\n/, '');
+        responseData = responseData.substring(responseData.indexOf('<article class="Box-row">'), responseData.lastIndexOf('</article>')).replace(/\n/, '');
         var repos = [];
-        var splitWithH3 = responseData.split('<h3');
+        var splitWithH3 = responseData.split('</article>');
         splitWithH3.shift();
         for (var i = 0; i < splitWithH3.length; i++) {
             var repo = new TrendingRepoModel();
@@ -39,13 +39,15 @@ export default class TrendingUtil {
 
             this.parseRepoBaseInfo(repo, html);
 
-            var metaNoteContent = this.parseContentWithNote(html, 'class="f6 text-gray mt-2">', '</li>');
-            repo.meta = this.parseRepoLabelWithTag(repo, metaNoteContent, TAGS.meta);
-            repo.starCount = this.parseRepoLabelWithTag(repo, metaNoteContent, TAGS.starCount);
-            repo.forkCount = this.parseRepoLabelWithTag(repo, metaNoteContent, TAGS.forkCount);
+            var metaNoteContent = this.parseContentWithNote(html, 'class="d-inline-block float-sm-right">', '</span>');
+            var starCountContent = this.parseContentWithNote(html, '/stargazers">', '</a>');
+            var forkCountContent = this.parseContentWithNote(html, '/members">', '</a>');
+            repo.meta = this.parseRepoLabelWithTag(repo, metaNoteContent, '</svg>');
+            repo.starCount = this.parseRepoLabelWithTag(repo, starCountContent, '</svg>');
+            repo.forkCount = this.parseRepoLabelWithTag(repo, forkCountContent, '</svg>');
 
-            this.parseRepoLang(repo, metaNoteContent);
-            this.parseRepoContributors(repo, metaNoteContent);
+            this.parseRepoLang(repo, html);
+            this.parseRepoContributors(repo, html);
             repos.push(repo);
         }
         return repos;
@@ -70,19 +72,12 @@ export default class TrendingUtil {
         repo.url = url;
         repo.fullName = url.slice(1, url.length);
 
-        var description = this.parseContentWithNote(htmlBaseInfo, '<p class="col-9 d-inline-block text-gray m-0 pr-4">', '</p>');
+        var description = this.parseContentWithNote(htmlBaseInfo, '<p class="col-9 text-gray my-1 pr-4">', '</p>');
         repo.description = description;
     }
 
     static parseRepoLabelWithTag(repo, noteContent, tag) {
-        let startFlag;
-        if (TAGS.starCount === tag || TAGS.forkCount === tag) {
-            startFlag = tag.start + ' href="/' + repo.fullName + tag.flag;
-        } else {
-            startFlag = tag.start;
-        }
-        let content = this.parseContentWithNote(noteContent, startFlag, tag.end);
-        let metaContent = content.substring(content.indexOf('</svg>') + '</svg>'.length, content.length);
+        let metaContent = noteContent.substring(noteContent.indexOf(tag) + tag.length, noteContent.length);
         return StringUtil.trim(metaContent);
     }
 
@@ -92,7 +87,7 @@ export default class TrendingUtil {
     }
 
     static parseRepoContributors(repo, htmlContributors) {
-        htmlContributors = this.parseContentWithNote(htmlContributors, 'Built by', '</a>');
+        htmlContributors = this.parseContentWithNote(htmlContributors, 'Built by', '</span>');
         var splitWitSemicolon = htmlContributors.split('"');
         repo.contributorsUrl = splitWitSemicolon[1];
         var contributors = [];
