@@ -6,6 +6,12 @@
  */
 import TrendingUtil from './TrendingUtil';
 
+const FILTER_URLS = [
+    {
+        from: 'https://github.com/trending/All Language?since=daily',
+        to: 'https://github.com/trending?since=daily'
+    }
+];
 export default class GitHubTrending {
     constructor() {//Singleton pattern
         if (typeof GitHubTrending.instance === 'object') {
@@ -15,6 +21,7 @@ export default class GitHubTrending {
     }
 
     fetchTrending(url) {
+        url = this.filterUrl(url);
         return new Promise((resolve, reject) => {
             fetch(url)
                 .then((response) => response.text())
@@ -31,5 +38,14 @@ export default class GitHubTrending {
         });
     }
 
-
+    filterUrl(url) {
+        for (let i = 0; i < FILTER_URLS.length; i++) {
+            let val = FILTER_URLS[i];
+            if (val.from === url) {
+                return val.to;
+            }
+        }
+        return url;
+    }
 }
+
