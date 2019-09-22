@@ -28,8 +28,13 @@ DerivedData
 #
 node_modules/
 npm-debug.log
-examples/
+examples
 
 .buckconfig
 .flowconfig
 .watchmanconfig
+/android/build
+/android/RCTWeChat.iml
+
+
+

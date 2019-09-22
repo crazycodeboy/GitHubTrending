@@ -32,19 +32,20 @@ export default class TrendingUtil {
         responseData = responseData.substring(responseData.indexOf('<article class="Box-row">'), responseData.lastIndexOf('</article>')).replace(/\n/, '');
         var repos = [];
         var splitWithH3 = responseData.split('</article>');
-        splitWithH3.shift();
-        for (var i = 0; i < splitWithH3.length; i++) {
-            var repo = new TrendingRepoModel();
-            var html = splitWithH3[i];
+        // splitWithH3.shift();
+        for (let i = 0; i < splitWithH3.length; i++) {
+            let repo = new TrendingRepoModel();
+            let html = splitWithH3[i];
 
             this.parseRepoBaseInfo(repo, html);
+            let spanArr = html.split('</svg>\n</span>');
+            let starCountContent = this.parseContentWithNote(spanArr[2], '', '</a>');
+            let forkCountContent = this.parseContentWithNote(spanArr[3], '', '</a>');
+            let metaNoteContent = this.parseContentWithNote(spanArr[4], '', '</span>');
 
-            var metaNoteContent = this.parseContentWithNote(html, 'class="d-inline-block float-sm-right">', '</span>');
-            var starCountContent = this.parseContentWithNote(html, '/stargazers">', '</a>');
-            var forkCountContent = this.parseContentWithNote(html, '/members">', '</a>');
-            repo.meta = this.parseRepoLabelWithTag(repo, metaNoteContent, '</svg>');
-            repo.starCount = this.parseRepoLabelWithTag(repo, starCountContent, '</svg>');
-            repo.forkCount = this.parseRepoLabelWithTag(repo, forkCountContent, '</svg>');
+            repo.starCount = starCountContent;
+            repo.forkCount = forkCountContent;
+            repo.meta = metaNoteContent;
 
             this.parseRepoLang(repo, html);
             this.parseRepoContributors(repo, html);
@@ -74,11 +75,6 @@ export default class TrendingUtil {
 
         var description = this.parseContentWithNote(htmlBaseInfo, '<p class="col-9 text-gray my-1 pr-4">', '</p>');
         repo.description = description;
-    }
-
-    static parseRepoLabelWithTag(repo, noteContent, tag) {
-        let metaContent = noteContent.substring(noteContent.indexOf(tag) + tag.length, noteContent.length);
-        return StringUtil.trim(metaContent);
     }
 
     static parseRepoLang(repo, metaNoteContent) {
