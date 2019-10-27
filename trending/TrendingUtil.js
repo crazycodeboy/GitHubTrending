@@ -3,6 +3,7 @@
  * 工具类：用于将github trending html 转换成 TrendingRepoModel
  * 项目地址:https://github.com/crazycodeboy/GitHubTrending
  * 博客地址:http://www.devio.org
+ * @version 3.1.2 2019.10.27
  * @flow
  */
 
@@ -38,10 +39,10 @@ export default class TrendingUtil {
             let html = splitWithH3[i];
 
             this.parseRepoBaseInfo(repo, html);
-            let spanArr = html.split('</svg>\n</span>');
-            let starCountContent = this.parseContentWithNote(spanArr[2], '', '</a>');
-            let forkCountContent = this.parseContentWithNote(spanArr[3], '', '</a>');
-            let metaNoteContent = this.parseContentWithNote(spanArr[4], '', '</span>');
+            let spanArr = html.split('</svg>\n');
+            let starCountContent = this.parseContentWithNote(spanArr[3], '', '</a>');
+            let forkCountContent = this.parseContentWithNote(spanArr[4], '', '</a>');
+            let metaNoteContent = this.parseContentWithNote(spanArr[5], '', '</span>');
 
             repo.starCount = starCountContent;
             repo.forkCount = forkCountContent;
