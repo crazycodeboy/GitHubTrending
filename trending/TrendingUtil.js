@@ -70,7 +70,7 @@ export default class TrendingUtil {
 
     static parseRepoBaseInfo(repo, htmlBaseInfo) {
         var urlIndex = htmlBaseInfo.indexOf('<a href="') + '<a href="'.length;
-        var url = htmlBaseInfo.slice(urlIndex, htmlBaseInfo.indexOf('">', urlIndex));
+        var url = htmlBaseInfo.slice(urlIndex, htmlBaseInfo.indexOf('" data-hydro-click', urlIndex));
         repo.url = url;
         repo.fullName = url.slice(1, url.length);
 
