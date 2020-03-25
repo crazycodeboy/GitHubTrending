@@ -1,4 +1,8 @@
 # GitHubTrending
+
+[![Download](https://img.shields.io/badge/Download-v3.1.6-ff69b4.svg) ](https://www.npmjs.com/package/GitHubTrending)
+[ ![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-brightgreen.svg)](https://github.com/crazycodeboy/GitHubTrending/pulls)
+
 This is a library for fetch object data from "https://github.com/trending".
 
 

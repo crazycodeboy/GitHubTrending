@@ -40,9 +40,9 @@ export default class TrendingUtil {
 
             this.parseRepoBaseInfo(repo, html);
             let spanArr = html.split('</svg>\n');
-            let starCountContent = this.parseContentWithNote(spanArr[3], '', '</a>');
-            let forkCountContent = this.parseContentWithNote(spanArr[4], '', '</a>');
-            let metaNoteContent = this.parseContentWithNote(spanArr[5], '', '</span>');
+            let starCountContent = this.parseContentWithNote(spanArr[2], '', '</a>');
+            let forkCountContent = this.parseContentWithNote(spanArr[3], '', '</a>');
+            let metaNoteContent = this.parseContentWithNote(spanArr[4], '', '</span>');
 
             repo.starCount = starCountContent;
             repo.forkCount = forkCountContent;
