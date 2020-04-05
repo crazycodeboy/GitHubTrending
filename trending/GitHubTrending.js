@@ -8,8 +8,8 @@ import TrendingUtil from './TrendingUtil';
 
 const FILTER_URLS = [
     {
-        from: 'https://github.com/trending/All Language?since=daily',
-        to: 'https://github.com/trending?since=daily'
+        from: 'https://github.com/trending/All Language?',
+        to: 'https://github.com/trending?'
     }
 ];
 export default class GitHubTrending {
@@ -41,8 +41,8 @@ export default class GitHubTrending {
     filterUrl(url) {
         for (let i = 0; i < FILTER_URLS.length; i++) {
             let val = FILTER_URLS[i];
-            if (val.from === url) {
-                return val.to;
+            if (url.startsWith(val.from)) {
+                return url.replace(val.from,val.to);
             }
         }
         return url;
