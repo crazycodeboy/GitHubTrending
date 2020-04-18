@@ -1,6 +1,6 @@
 # GitHubTrending
 
-[![Download](https://img.shields.io/badge/Download-v3.1.6-ff69b4.svg) ](https://www.npmjs.com/package/GitHubTrending)
+[![Download](https://img.shields.io/badge/Download-v5.0.0-ff69b4.svg) ](https://www.npmjs.com/package/GitHubTrending)
 [ ![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-brightgreen.svg)](https://github.com/crazycodeboy/GitHubTrending/pulls)
 
 This is a library for fetch object data from "https://github.com/trending".
@@ -14,7 +14,8 @@ Run `npm i GitHubTrending --save`
 ## Usage
 
 ```JavaScript
-new GitHubTrending().fetchTrending(url)
+const AUTH_TOKEN = '从问答区https://coding.imooc.com/learn/qa/304.html获取的token';
+new GitHubTrending(AUTH_TOKEN).fetchTrending(url)
     .then((data)=> {
         //
     }).catch((error)=> {

@@ -1,6 +1,6 @@
 {
   "name": "GitHubTrending",
-  "version": "3.2.0",
+  "version": "5.0.0",
   "description": "This is a library for obtaining https://github.com/trending data.",
   "main": "index.js",
   "scripts": {

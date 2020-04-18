@@ -4,37 +4,41 @@
  * 博客地址:http://www.devio.org
  * @flow
  */
-import TrendingUtil from './TrendingUtil';
-
 const FILTER_URLS = [
     {
         from: 'https://github.com/trending/All Language?',
-        to: 'https://github.com/trending?'
-    }
+        to: 'https://github.com/trending?',
+    },
 ];
+const URL = 'http://api.devio.org/as/trending?sourceUrl=';
 export default class GitHubTrending {
-    constructor() {//Singleton pattern
+    constructor(authToken) {//Singleton pattern
         if (typeof GitHubTrending.instance === 'object') {
             return GitHubTrending.instance;
         }
+        this.authToken = authToken;
         GitHubTrending.instance = this;
     }
 
     fetchTrending(url) {
         url = this.filterUrl(url);
+        url = `${URL}${url}`;
         return new Promise((resolve, reject) => {
-            fetch(url)
-                .then((response) => response.text())
+            fetch(url, {headers: {'auth-token': this.authToken}})
+                .then((response) => {
+                    return response.json();
+                })
+                .then((responseData) => {
+                    if (responseData['code'] === 0) {
+                        resolve(responseData['data']['list']);
+                    } else {
+                        throw new Error(JSON.stringify(responseData));
+                    }
+
+                })
                 .catch((error) => {
                     reject(error);
-                    console.log(error);
-                }).then((responseData) => {
-                try {
-                    resolve(TrendingUtil.htmlToRepo(responseData));
-                } catch (e) {
-                    reject(e);
-                }
-            }).done();
+                });
         });
     }
 
@@ -42,7 +46,7 @@ export default class GitHubTrending {
         for (let i = 0; i < FILTER_URLS.length; i++) {
             let val = FILTER_URLS[i];
             if (url.startsWith(val.from)) {
-                return url.replace(val.from,val.to);
+                return url.replace(val.from, val.to);
             }
         }
         return url;
