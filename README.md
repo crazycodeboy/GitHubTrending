@@ -14,7 +14,7 @@ Run `npm i GitHubTrending --save`
 ## Usage
 
 ```JavaScript
-const AUTH_TOKEN = '从问答区https://coding.imooc.com/learn/qa/304.html获取的token';
+const AUTH_TOKEN = '输入最新的token';
 new GitHubTrending(AUTH_TOKEN).fetchTrending(url)
     .then((data)=> {
         //
@@ -22,6 +22,8 @@ new GitHubTrending(AUTH_TOKEN).fetchTrending(url)
         //
 });
 ```
+token从[https://coding.imooc.com/class/304.html](https://coding.imooc.com/class/304.html)的问答区获取。
+
 
 TrendingRepoModel
 -------
